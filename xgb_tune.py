@@ -12,12 +12,16 @@ max_depth = []#maximum depth of tree - Also helps with over fitting
 
 max_leaf_nodes = [] #max number of final nodes in a tree - I use max_depth instead
 
-gamma = [] Need pos reduction in the loss function, gamma is the min loss red for split ->higher value makes model more conservative
+gamma = [] #Need pos reduction in the loss function, gamma is the min loss red for split ->higher value makes model more conservative
 
 alpha = [] # Also used for overfitting.L1 reg
 
 lambda = []# Also used for overfitting. L2 reg
 
+#pos_weight_2=y1[y1==0].count() / y1[y1==1].count()
+#pos_weight = y1[y1==0].count()/y1.sum()
+# If unbalanced
+#'scale_pos_weight' :(pos_weight, pos_weight_2,1)
 
 param_grid= {
 'max_depth' : range(4,12,2),
@@ -40,10 +44,7 @@ xg = xgb.XGBClassifier(random_state=1985, eval_metric='map', n_jobs=-1, objectiv
 grid_xgb = GridSearchCV(xg,param_grid, cv=3, scoring='roc_auc')#also try ‘average_precision’, 'recall_score'
 clf3.fit(X1, y1)
 
-#pos_weight_2=y1[y1==0].count() / y1[y1==1].count()
-#pos_weight = y1[y1==0].count()/y1.sum()
-# If unbalanced
-#'scale_pos_weight' :(pos_weight, pos_weight_2,1)
+
 
 
 
