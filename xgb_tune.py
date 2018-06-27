@@ -30,7 +30,7 @@ param_grid= {
 'subsample' : range(.6,1,.1),
 'colsample_by_tree" :range(.6,1,.1)
 }
-
+#NOTE - 1500 total combinations
 
 from sklearn.model_selection import cross_val_score, KFold, GridSearchCV, RandomizedSearchCV
 from sklearn.metrics import confusion_matrix, precision_recall_curve, average_precision_score, precision_score, recall_score
@@ -40,12 +40,26 @@ import xgboost as xgb
 
 # 
 xg = xgb.XGBClassifier(random_state=1985, eval_metric='map', n_jobs=-1, objective='binary:logistic')
+
 #or logloss as metric.If its balanced (HA!) then auc is fine. Also  set scale_pos_weight (max ranking order) or max_delta_step=1 (maximizes correct prob) for inbalanced dataset
-grid_xgb = GridSearchCV(xg,param_grid, cv=3, scoring='roc_auc')#also try ‘average_precision’, 'recall_score'
-clf3.fit(X1, y1)
+grid_xgb = GridSearchCV(xg, param_grid = param_grid, cv=3, scoring='roc_auc')#also try ‘average_precision’, 'recall_score'
 
+grid_xgb.fit(X1, y1)
 
+grid_xgb.cv_results_
+grid_xgb.best_estimator_
+grid_xgb.best_score_
+grid_xgb.best_params_
 
+n_iter_search = 50
+ran_xgb = RandomizedSearchCV(xg, param_distributions=param_dist, cv=3, scoring='roc_auc', n_iter=n_iter_search,)
+
+ran_xgb.fit(X1, y1)
+
+ran_xgb.cv_results_
+ran_xgb.best_estimator_
+ran_xgb.best_score_
+ran_xgb.best_params_
 
 
 
