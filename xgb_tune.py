@@ -52,7 +52,7 @@ grid_xgb.best_score_
 grid_xgb.best_params_
 
 n_iter_search = 50
-ran_xgb = RandomizedSearchCV(xg, param_distributions=param_dist, cv=3, scoring='roc_auc', n_iter=n_iter_search,)
+ran_xgb = RandomizedSearchCV(xg, param_distributions=param_grid, cv=3, scoring='roc_auc', n_iter=n_iter_search,)
 
 ran_xgb.fit(train.drop(columns=[target]), train[target])
 
