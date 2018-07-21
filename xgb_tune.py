@@ -24,11 +24,11 @@ lambda = []# Also used for overfitting. L2 reg
 #'scale_pos_weight' :(pos_weight, pos_weight_2,1)
 
 param_grid= {
-'max_depth' : range(4,12,2),
-'min_child_weight' : range(1,7,2),
-'gamma' : range(0,.1,.5),
-'subsample' : range(.6,1,.1),
-'colsample_by_tree" :range(.6,1,.1)
+'max_depth' : range(4,12,2)
+,'min_child_weight' : range(1,7,2)
+,'gamma':[i/100.0 for i in range(0,10)]
+,'subsample':[i/10.0 for i in range(4,10)]
+,'colsample_bytree':[i/10.0 for i in range(4,10)]
 }
 #NOTE - 1500 total combinations
 
@@ -44,7 +44,7 @@ xg = xgb.XGBClassifier(random_state=1985, eval_metric='map', n_jobs=-1, objectiv
 #or logloss as metric.If its balanced (HA!) then auc is fine. Also  set scale_pos_weight (max ranking order) or max_delta_step=1 (maximizes correct prob) for inbalanced dataset
 grid_xgb = GridSearchCV(xg, param_grid = param_grid, cv=3, scoring='roc_auc')#also try ‘average_precision’, 'recall_score'
 
-grid_xgb.fit(X1, y1)
+grid_xgb.fit(train.drop(columns=[target]), train[target])
 
 grid_xgb.cv_results_
 grid_xgb.best_estimator_
@@ -54,7 +54,7 @@ grid_xgb.best_params_
 n_iter_search = 50
 ran_xgb = RandomizedSearchCV(xg, param_distributions=param_dist, cv=3, scoring='roc_auc', n_iter=n_iter_search,)
 
-ran_xgb.fit(X1, y1)
+ran_xgb.fit(train.drop(columns=[target]), train[target])
 
 ran_xgb.cv_results_
 ran_xgb.best_estimator_
